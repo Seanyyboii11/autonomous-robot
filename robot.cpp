@@ -1,7 +1,6 @@
 #include "robot.h"
 #include <iostream>
 
-
 RobotState updateState(robotData &robot){
 if(robot.leftMotor.overHeating || robot.rightMotor.overHeating){
     return RobotState::MOTOR_OVERHEAT;
@@ -30,7 +29,6 @@ void printRobotInfo(const robotData &robot){
     std::cout << "Avoidance Maneuvers: " << robot.avoidanceManeuvers << "\n";
 }
 
-
 std::string stateToString(RobotState state){
     switch(state){
         case RobotState::STARTUP: return "STARTUP";
@@ -44,7 +42,6 @@ std::string stateToString(RobotState state){
     }
 }
 
-
 std::string directionToString(DriveDirection direction){
     switch(direction){
         case DriveDirection::FORWARD: return "FORWARD";
@@ -56,3 +53,39 @@ std::string directionToString(DriveDirection direction){
     }
 }
 
+void setMotorSpeed(motorData &motor, int pwmSpeed){
+    if(pwmSpeed < 0) pwmSpeed = 0;
+
+    if(pwmSpeed > 255) pwmSpeed = 255;
+    
+    motor.pwmSpeed = pwmSpeed;
+}
+
+void drive(robotData &robot, DriveDirection direction, int speed){
+    robot.direction = direction; // no need for drivedirection::direction since it already is. 
+    setMotorSpeed(robot.leftMotor, speed);
+    setMotorSpeed(robot.rightMotor, speed);
+}
+
+void stopRobot(robotData &robot){
+    setMotorSpeed(robot.leftMotor, 0);
+    setMotorSpeed(robot.rightMotor, 0);
+    robot.direction = DriveDirection::STOP;
+
+}
+
+void handleObstacle(robotData &robot){
+    if(robot.ultrasonic.obstacleDetected){
+        stopRobot(robot);
+        robot.state = RobotState::AVOIDING;
+        
+        drive(robot, DriveDirection::LEFT, 150);
+        robot.avoidanceManeuvers++;
+
+        robot.ultrasonic.obstacleDetected = false;
+        robot.state = RobotState::AUTONOMOUS;
+
+
+    }
+
+}

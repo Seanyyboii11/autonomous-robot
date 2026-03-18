@@ -2,6 +2,9 @@
 #define ROBOT_H
 
 #include <fstream>
+#include "ultrasonic.h"
+#include "odometry.h"
+#include "telemetry.h"
 
 enum class RobotState {
     STARTUP,
@@ -33,12 +36,6 @@ struct motorData{
     int pwmSpeed = 0;
 };
 
-struct UltrasonicData{
-    double distance = 0;
-    double detectionThreshold = 30.0; //cm
-    bool obstacleDetected = false;
-};
-
 struct robotData{
     RobotState state = RobotState::STARTUP;
     DriveDirection direction = DriveDirection::STOP;
@@ -51,7 +48,7 @@ struct robotData{
     bool remoteSwitch = false;
     double totalDistanceTraveled = 0;
     int avoidanceManeuvers = 0;
-    double heading = 0; //
+    double heading = 0; //direction facing in degrees
 };
 
 RobotState updateState(robotData &robot);
@@ -66,6 +63,12 @@ std::string stateToString(RobotState state);
 
 std::string directionToString(DriveDirection direction);
 
+void setMotorSpeed(motorData &motor, int pwmSpeed);
 
+void drive(robotData &robot, DriveDirection direction, int speed);
+
+void stopRobot(robotData &robot);
+
+void handleObstacle(robotData &robot);  
 
 #endif
