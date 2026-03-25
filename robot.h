@@ -5,6 +5,7 @@
 #include "ultrasonic.h"
 #include "odometry.h"
 #include "telemetry.h"
+#include "pid.h"
 
 enum class RobotState {
     STARTUP,
@@ -49,6 +50,10 @@ struct robotData{
     double totalDistanceTraveled = 0;
     int avoidanceManeuvers = 0;
     double heading = 0; //direction facing in degrees
+    double sumError = 0;
+    double lastError = 0;
+    double pidError = 0;
+    double pidCorrection = 0;
 };
 
 RobotState updateState(robotData &robot);

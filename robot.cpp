@@ -17,18 +17,6 @@ else{
 
 }
 
-void printRobotInfo(const robotData &robot){
-
-    std::cout << "State: " << stateToString(robot.state) << "\n";
-    std::cout << "Direction: " << directionToString(robot.direction) << "\n";
-    std::cout << "Distance: " << robot.totalDistanceTraveled << "\n";
-    std::cout << "Heading: " << robot.heading << "\n";
-    std::cout << "Left Motor Temp: " << robot.leftMotor.temperature << "\n";
-    std::cout << "Right Motor Temp: " << robot.rightMotor.temperature << "\n";
-    std::cout << "Obstacle: " << robot.ultrasonic.distance << "cm\n";
-    std::cout << "Avoidance Maneuvers: " << robot.avoidanceManeuvers << "\n";
-}
-
 std::string stateToString(RobotState state){
     switch(state){
         case RobotState::STARTUP: return "STARTUP";

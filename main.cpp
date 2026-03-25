@@ -25,6 +25,11 @@ int main(){
     robot.state = updateState(robot);
     printRobotInfo(robot);
     
+    robot.leftMotor.encoderTicks += 10;
+    robot.rightMotor.encoderTicks += 9;
+    updatePID(robot);
+    if(robot.leftMotor.temperature < 50) robot.leftMotor.overHeating = false;
+    
 
     }
 
